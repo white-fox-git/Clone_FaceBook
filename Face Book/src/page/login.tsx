@@ -1,10 +1,16 @@
+/** 로그인 페이지 입니다. ( Root 페이지입니다. ) */
+
 import { useState } from "react";
 import style from '../css/login.module.css';
 import { Link } from 'react-router-dom';
+import Footer from "../component/footer";
 
 const Login = () => {
 
+    /** 이메일 또는 전화번호를 입력받는 State */
     const [id, setId] = useState<string | number | readonly string[] | undefined>('');
+
+    /** 비밀번호를 입력받는 State 변수*/
     const [pwd, setPwd] = useState<string | number | readonly string[] | undefined>('');
 
     return(
@@ -26,10 +32,7 @@ const Login = () => {
                     <p className={style.brandPage}>유명인, 브랜드 또는 비즈니스를 위한 <Link to="" className={style.brandLink}>페이지 만들기</Link></p>
                 </div>
             </main>
-            <footer className={style.footer}>
-                <p>Develope by White-Fox</p>
-                <a target="blank" href="https://github.com/white-fox-git" className={style.a}>Git Hub</a>
-            </footer>
+            <Footer />
         </>
     )
 }

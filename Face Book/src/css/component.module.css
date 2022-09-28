@@ -1,0 +1,19 @@
+@import url('./default.css');
+
+/* Footer CSS */
+
+.footer
+{
+    text-align: center;
+    padding-top: 20px;
+    font-family: var(--Nanum);
+    color: gray;
+}
+
+.a
+{
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: var(--main-color);
+}
