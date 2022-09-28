@@ -1,0 +1,157 @@
+@import url('./default.css');
+
+.main
+{
+    display: flex;
+    justify-content: center;
+    background-color: #F0F2F5;
+    flex-flow: column;
+}
+
+.mainHeader
+{
+    padding: 40px;
+    text-align: center;
+}
+
+.headerText
+{
+    font-family: 'face';
+    font-size: 54px;
+    color: var(--main-color);
+}
+
+.mainHeader p
+{
+    margin-top: 20px;
+    line-height: 1.5em;
+    font-size: 24px;
+    font-family: var(--Nanum);
+    font-weight: 400;
+}
+
+.login
+{
+    text-align: center;
+}
+
+.loginBox
+{
+    width: 80%;
+    max-width: 340px;
+    height: 280px;
+    background-color: white;
+    border: 1px solid rgb(189, 189, 189);
+    border-radius: 8px;
+    padding: 30px;
+    margin: 0 auto;
+}
+
+.input
+{
+    padding: 14px;
+    font-size: 18px;
+    width: 90%;
+    border-radius: 4px;
+    border: 1px solid rgb(189, 189, 189);
+    margin-bottom: 10px;
+}
+
+.input:focus
+{
+    outline: none;
+    border: 1px solid var(--main-color);
+}
+
+.loginBtn
+{
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    padding: 14px;
+    font-size: 18px;
+    background-color: var(--main-color);
+    font-family: var(--Nanum);
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.loginBtn:hover
+{
+    background-color: var(--hover-color);
+}
+
+.forgotPwd
+{
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: var(--main-color);
+    transition: 0.3s;
+}
+
+.forgotPwd:hover
+{
+    color: var(--hover-color);
+}
+
+.newId
+{
+    margin-top: 10px;
+    padding: 14px;
+    width: 50%;
+    border: 0;
+    border-radius: 4px;
+    background-color: #42B72A;
+    color: white;
+    font-family: var(--Nanum);
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.newId:hover
+{
+    background-color: #3fa82a;
+}
+
+.brandPage
+{
+    margin-top: 30px;
+    margin-bottom: 100px;
+    font-size: 14px;
+}
+
+.brandLink
+{
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+.brandLink:hover, .a:hover
+{
+    color: var(--hover-color);
+}
+
+.footer
+{
+    text-align: center;
+    padding-top: 20px;
+    font-family: var(--Nanum);
+    color: gray;
+}
+
+.a
+{
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: var(--main-color);
+}

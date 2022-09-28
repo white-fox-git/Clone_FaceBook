@@ -1,4 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
 @font-face {
     font-family: 'face';
     src: url('../assets/facebook_font.OTF') format('truetype');
+}
+
+:root
+{
+    --main-color : #1877F2;
+    --hover-color: #176ddd;
+    --Nanum : 'Nanum Gothic';
 }
