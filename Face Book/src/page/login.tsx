@@ -25,7 +25,7 @@ const Login = () => {
                         <input type="text" placeholder="이메일 및 전화번호" className={style.input} value={id} onChange={(e) => {setId(e.target.value)}}/>
                         <input type="password" placeholder="비밀번호" className={style.input} value={pwd} onChange={(e) => {setPwd(e.target.value)}}/>
                         <button className={style.loginBtn}>로그인</button>
-                        <Link to="" className={style.forgotPwd}>비밀번호를 잊으셨나요?</Link>
+                        <Link to="/identify" className={style.forgotPwd}>비밀번호를 잊으셨나요?</Link>
                         <hr />
                         <button className={style.newId}>새 계정 만들기</button>
                     </div>

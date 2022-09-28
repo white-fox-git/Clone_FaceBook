@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 
 @font-face {
     font-family: 'face';
@@ -9,5 +9,6 @@
 {
     --main-color : #1877F2; 
     --hover-color: #176ddd;
-    --Nanum : 'Nanum Gothic';
+    --black-color: #696969;
+    --Noto : 'Noto Sans KR';
 }

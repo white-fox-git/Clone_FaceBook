@@ -1,0 +1,176 @@
+@import url('./default.css');
+
+.header
+{
+    display: flex;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 0px 0px 1px 5px rgb(0, 0, 0);
+    justify-content: space-between;
+    align-items: center ;
+}
+
+.headerLogo
+{
+    font-family: 'face';
+    color: var(--main-color);
+    font-size: 26px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
+}
+
+.header button
+{
+    padding: 10px;
+    width: 80px;
+    border: 0;
+    border-radius: 4px;
+    background-color: var(--main-color);
+    color: white;
+    font-family: var(--Noto);
+    letter-spacing: 1px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.header button:hover
+{
+    background-color: var(--hover-color);
+}
+
+.main
+{
+    padding-top: 100px;
+    background-color: #F0F2F5;
+    font-family: var(--Noto);
+    padding-bottom: 100px;
+}
+
+.formBox
+{
+    width: 90%;
+    min-width: 470px;
+    max-width: 500px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: white;
+    border: 1px solid rgb(189, 189, 189);
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+.formTitle
+{
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 18px;
+    color: var(--black-color);
+}
+
+.formBox hr
+{
+    border:0;
+    border-top: 1px solid rgb(223, 223, 223);
+}
+
+.input
+{
+    display: block;
+    padding: 14px;
+    font-size: 18px;
+    width: 80%;
+    border-radius: 4px;
+    border: 1px solid rgb(214, 214, 214);
+    margin: 10px auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: gray;
+    font-weight: 300;
+}
+
+.input:focus
+{
+    outline: none;
+    border: 1px solid var(--main-color);
+}
+
+.formBox p
+{
+    margin: 20px;
+    font-weight: 300;
+    color: var(--black-color);
+}
+
+.buttonBox
+{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: end;
+}
+
+.buttonBox button
+{
+    padding: 8px;
+    width: 90px;
+    margin-top: 10px;
+    margin-left: 20px;
+    cursor: pointer;
+    border: 0;
+    border-radius: 4px;
+    font-family: var(--Noto);
+    color: white;
+    background-color: var(--main-color);
+    transition: 0.3s;
+    letter-spacing: 1px;
+    font-weight: 300;
+}
+
+.buttonBox button:hover
+{
+    background-color: var(--hover-color);
+}
+
+.buttonBox button:first-child
+{
+    background-color: rgb(187, 187, 187);
+}
+
+.buttonBox button:first-child:hover
+{
+    background-color: rgb(145, 145, 145);
+}
+
+.verificationAlertBox
+{
+    margin: 20px;
+    padding: 14px;
+    background-color: #ffe0e0;
+    border: 1px solid #ff9c9c;
+    animation-name: fade;
+    animation-duration: 0.5s;
+}
+
+.verificationAlertBox p
+{
+    font-size: 14px;
+    margin: 0;
+    margin-top: 10px;
+}
+
+@keyframes fade
+{
+    from{
+        opacity: 0;
+    }
+
+    to{
+        opacity: 100;
+    }
+}
