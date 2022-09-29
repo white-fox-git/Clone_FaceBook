@@ -34,6 +34,8 @@ const Login = () => {
 
             console.log(data);
 
+
+            // 로그인 요청
             axios.post('http://localhost:9200/login', data)
             .then((res) => {
                 console.log(res.data);
