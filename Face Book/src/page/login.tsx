@@ -4,14 +4,49 @@ import { useState } from "react";
 import style from '../css/login.module.css';
 import { Link } from 'react-router-dom';
 import Footer from "../component/footer";
+import axios from "axios";
 
 const Login = () => {
+
+    axios.defaults.withCredentials = false;
 
     /** 이메일 또는 전화번호를 입력받는 State */
     const [id, setId] = useState<string | number | readonly string[] | undefined>('');
 
     /** 비밀번호를 입력받는 State 변수*/
     const [pwd, setPwd] = useState<string | number | readonly string[] | undefined>('');
+
+
+    /** 입력 필드 검증 및 로그인 기능 함수 */
+    const login = () => {
+        if(id == '')
+        {
+            alert('입력값을 확인해주세요.');
+        }
+        else if(pwd == '')
+        {
+            alert('입력값을 확인해주세요.');
+        }
+        else
+        {
+
+            let data = {id : id, pwd};
+
+            console.log(data);
+
+
+            // 로그인 요청
+            axios.post('http://localhost:9200/login', data)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((error) => {
+                console.log('로그인 실패');
+                console.log(error);
+            })
+        }
+    }
+
 
     return(
         <>
@@ -24,7 +59,7 @@ const Login = () => {
                     <div className={style.loginBox}>
                         <input type="text" placeholder="이메일 및 전화번호" className={style.input} value={id} onChange={(e) => {setId(e.target.value)}}/>
                         <input type="password" placeholder="비밀번호" className={style.input} value={pwd} onChange={(e) => {setPwd(e.target.value)}}/>
-                        <button className={style.loginBtn}>로그인</button>
+                        <button className={style.loginBtn} onClick={() => {login()}}>로그인</button>
                         <Link to="/identify" className={style.forgotPwd}>비밀번호를 잊으셨나요?</Link>
                         <hr />
                         <button className={style.newId}>새 계정 만들기</button>
