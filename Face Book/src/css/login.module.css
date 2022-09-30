@@ -140,6 +140,24 @@
     color: var(--hover-color);
 }
 
+.AlertBox
+{
+    margin: 20px;
+    padding: 14px;
+    background-color: #ffe0e0;
+    border: 1px solid #ff9c9c;
+    animation-name: fade;
+    animation-duration: 0.5s;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.AlertBox p
+{
+    font-size: 14px;
+}
+
+
 @media screen and (min-width: 900px) {
     .main
     {
@@ -165,5 +183,16 @@
     .mainHeader p
     {
         font-size: 26px;
+    }
+}
+
+@keyframes fade
+{
+    from{
+        opacity: 0;
+    }
+
+    to{
+        opacity: 100;
     }
 }
