@@ -3,6 +3,7 @@
 const http = require('http');
 const express = require('express');
 const cors = require('cors');
+const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
 
@@ -14,10 +15,31 @@ app.use(cors(
     }
 ));
 
+var db;
 
-app.listen(9200, () => {
-    console.log('listening on 9200');
-});
+/** Mongo DB Connect */
+MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongodb.net/?retryWrites=true&w=majority', 
+(error, client) => {
+    if(error)
+        return console.log(error);
+    
+    db = client.db('user');
+
+    
+
+    app.post('/createuser', (req, res) => {
+        db.collection('user infomation').insertOne(req.body, (error, result) => {
+            console.log('저장완료');
+        });
+        res.send('회원가입 성공');
+    });
+
+
+    app.listen(9200, () => {
+        console.log('listening on 9200');
+    });
+})
+
 
 app.post('/login', (req, res) => {
     console.log(req.body);
