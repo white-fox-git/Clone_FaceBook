@@ -38,7 +38,8 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
     app.post('/createuser', async (req, res) => {
 
         const salt = await crypto.randomBytes(128).toString('base64');
-        const hashPassword = await encryptPssword(req.body.password, salt);
+        const hashPassword = await encryptPssword(req.body.pwd, salt);
+        console.log(req.body.pwd);
 
         const data = {
             firstName : req.body.firstName,
@@ -57,7 +58,21 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
 
     /** 로그인 요청 */
     app.post('/login', (req, res) => {
-        console.log(req.body);
-        res.send('로그인 성공');
+        db.collection('user infomation').findOne({user : req.body.id}, async (error, result) => {
+            if(error)
+                console.log(error);
+            
+            const checkPassword = await encryptPssword(req.body.pwd, result.salt);
+            
+            if(checkPassword == result.password){
+                
+                console.log('로그인 성공');
+                res.send('로그인 성공');
+            }
+            else
+            {
+                console.log('로그인 실패');
+            }
+        });
     });
 });
