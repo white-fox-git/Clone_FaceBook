@@ -44,11 +44,17 @@ const Login = () => {
             // 로그인 요청
             axios.post('http://localhost:9200/login', data)
             .then((res) => {
-                console.log(res.data);
+                if(res.data == true)
+                    console.log('login succese');
+                else
+                {
+                    setAlert(true);
+                    setTimeout(() => setAlert(false), 3000);
+                }
             })
             .catch((error) => {
-                console.log('로그인 실패');
-                console.log(error);
+                setAlert(true);
+                setTimeout(() => setAlert(false), 3000);
             })
         }
     }

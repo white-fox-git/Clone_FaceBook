@@ -42,11 +42,11 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
         console.log(req.body.pwd);
 
         const data = {
-            firstName : req.body.firstName,
-            lastName : req.body.lastName,
-            user : req.body.id,
-            password : hashPassword,
-            salt : salt
+            firstName : req.body.firstName, // 성
+            lastName : req.body.lastName, // 이름
+            user : req.body.id, // 이메일 또는 전화번호
+            password : hashPassword, // 암호화된 패스워드
+            salt : salt // salt 값
         }
 
         db.collection('user infomation').insertOne(data, (error, result) => {
@@ -62,17 +62,18 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
             if(error)
                 console.log(error);
             
-            const checkPassword = await encryptPssword(req.body.pwd, result.salt);
+            const checkPassword = await encryptPssword(req.body.pwd, result.salt); // 체크할 패스워드
             
             if(checkPassword == result.password){
-                
-                console.log('로그인 성공');
-                res.send('로그인 성공');
+                console.log('로그인 성공')
+                res.send(true);
             }
             else
             {
                 console.log('로그인 실패');
+                res.send(false);
             }
         });
     });
+    
 });

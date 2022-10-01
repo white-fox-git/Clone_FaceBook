@@ -31,7 +31,7 @@ const CreateUser = () => {
     /** 회원가입 요청 함수 */
     const create = () => {
         let data = {
-            firstNme : firstName, 
+            firstName : firstName, 
             lastName : lastName,
             id : id,
             pwd : pwd
