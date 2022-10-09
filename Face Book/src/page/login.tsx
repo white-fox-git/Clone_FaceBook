@@ -1,12 +1,17 @@
 /** 로그인 페이지 입니다. ( Root 페이지입니다. ) */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import style from '../css/login.module.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtAction } from "../util/Redux/Slice/jwtSlice";
+import { useDispatch, useSelector } from "react-redux/es/exports";
 import Footer from "../component/footer";
 import axios from "axios";
 
 const Login = () => {
+
+    const token = useSelector((state:any) => state.jwt);
+    const dispatch = useDispatch();
 
     axios.defaults.withCredentials = false;
     let navigate = useNavigate();
@@ -19,6 +24,10 @@ const Login = () => {
 
     /** Alert 창 */
     const [alert, setAlert] = useState<Boolean>(false);
+
+    useEffect(() => {
+        token.refreshToken != null ? navigate('/main') : null;
+    }, []);
 
 
     /** 입력 필드 검증 및 로그인 기능 함수 */
@@ -36,7 +45,7 @@ const Login = () => {
         else
         {
 
-            let data = {id : id, pwd};
+            let data:{} = {id : id, pwd};
 
             console.log(data);
 
@@ -44,8 +53,14 @@ const Login = () => {
             // 로그인 요청
             axios.post('http://localhost:9200/login', data)
             .then((res) => {
-                if(res.data == true)
-                    console.log('login succese');
+                if(res.data.auth == true)
+                {
+                    dispatch(jwtAction.setToken({
+                        accessToken : res.data.accessToken,
+                        refreshToken : res.data.refreshToken
+                    }));
+                    navigate('/main');
+                }
                 else
                 {
                     setAlert(true);
@@ -53,6 +68,7 @@ const Login = () => {
                 }
             })
             .catch((error) => {
+                console.log(error);
                 setAlert(true);
                 setTimeout(() => setAlert(false), 3000);
             })

@@ -1,13 +1,18 @@
 /** Server 입니다. */
 
+/** Config */
+require("dotenv").config();
 const crypto = require('crypto');
-const http = require('http');
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const MongoClient = require('mongodb').MongoClient;
-var db;
 const app = express();
 
+
+var db;
+
+/** 미들웨어 설정 */
 app.use(express.urlencoded({extended: false}));
 app.use(express.json()); 
 app.use(cors(
@@ -16,9 +21,58 @@ app.use(cors(
     }
 ));
 
-/** 비밀번호 암호화 */
+
+/** 비밀번호 암호화 
+ * @password user password
+ * @salt salt값
+*/
 const encryptPssword = async (password, salt) => {
     return crypto.createHash('sha512').update(password + salt).digest('hex');
+}
+
+/** Access Token 생성
+ * @user user id
+ */
+const createAccessToken = (user) => {
+
+    return jwt.sign({user}, process.env.ACCESS_TOKEN, {
+        expiresIn : "15M"
+    })
+}
+
+/** Refresh Token 생성 
+ * @user user id
+*/
+const createRefreshToken = (user) => {
+
+    return jwt.sign({user}, process.env.REFRESH_TOKEN, {
+        expiresIn : "10 days"
+    })
+}
+
+const accessVerify = (token) => {
+
+    if(!token)
+    {
+        console.log('Token missing');
+        return false;
+    }
+    else
+    {
+        jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
+            if(err)
+            {
+                console.log('Token is not verify')
+                return false;
+            }
+                
+            else
+            {
+                console.log('Token is verify');
+                return true;
+            }
+        })
+    }
 }
 
 /** Mongo DB Connect */
@@ -37,7 +91,7 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
     /** 회원가입 요청 */
     app.post('/createuser', async (req, res) => {
 
-        const salt = await crypto.randomBytes(128).toString('base64');
+        const salt = await crypto.randomBytes(128).toString('base64'); // 랜덤한 salt값 새성
         const hashPassword = await encryptPssword(req.body.pwd, salt);
         console.log(req.body.pwd);
 
@@ -61,19 +115,52 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
         db.collection('user infomation').findOne({user : req.body.id}, async (error, result) => {
             if(error)
                 console.log(error);
-            
-            const checkPassword = await encryptPssword(req.body.pwd, result.salt); // 체크할 패스워드
-            
-            if(checkPassword == result.password){
-                console.log('로그인 성공')
-                res.send(true);
-            }
-            else
-            {
+
+            if(result == null){
                 console.log('로그인 실패');
                 res.send(false);
             }
+            else{
+                const checkPassword = await encryptPssword(req.body.pwd, result.salt); // 체크할 패스워드
+            
+                if(checkPassword == result.password){
+                    
+                    /** 토큰 발급 */
+                    let accessToken = await createAccessToken(req.body.id);
+                    let refreshToken = await createRefreshToken(req.body.id);
+    
+                    res.send({auth : true, accessToken, refreshToken}); // 로그인 성공시 반환값
+                    console.log(`${req.body.id} - 로그인 성공`);
+                }
+                else
+                {
+                    console.log('로그인 실패');
+                    res.send(false);
+                }
+            }
+
+            app.get('/check', async (req, res) => {
+                const check =  await accessVerify(req.headers['jwt_access_token']);
+                console.log(check);
+                res.send(check);
+              });
+
+            app.post('/token', (req, res) => {
+                const token = req.body.token;
+
+                jwt.verify(token, process.env.REFRESH_TOKEN, async (err, payload) => {
+                    if(err)
+                        res.sendStatus(403);
+                    else{
+                        let accessToken = await createAccessToken(req.body.id);
+                        let refreshToken = await createRefreshToken(req.body.id);
+
+                        
+                    }
+
+                })
+            })
         });
     });
-    
 });
+
