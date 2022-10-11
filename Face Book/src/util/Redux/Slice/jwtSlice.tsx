@@ -1,7 +1,8 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, removeListener} from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
+    user : null,
     accessToken : null,
     refreshToken : null
 }
@@ -14,6 +15,7 @@ const jwtSlice = createSlice({
             axios.defaults.headers.common['Jwt_Access_Token'] = token.payload.accessToken;
 
             return {
+                user : token.payload.user,
                 accessToken : token.payload.accessToken,
                 refreshToken : token.payload.refreshToken
             }
@@ -21,27 +23,8 @@ const jwtSlice = createSlice({
         deleteToken : (state) => {
             return initialState;
         },
-        refresh : (state, data) => {
-            axios.post('http://localhost:9200/token', data.payload)
-            .then((res) => {
-                if(res.data.access == true)
-                {
-                    axios.defaults.headers.common['Jwt_Access_Token'] = res.data.accessToken;
-
-                    return {
-                        accessToken : res.data.accessToken,
-                        refreshToken : res.data.refreshToken
-                    }
-                }
-                else
-                {
-                    return initialState;
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                return initialState;
-            })
+        refresh : (state, data) => {   
+            return data.payload;
         }
     }
 });

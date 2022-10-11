@@ -56,6 +56,7 @@ const Login = () => {
                 if(res.data.auth == true)
                 {
                     dispatch(jwtAction.setToken({
+                        user : id,
                         accessToken : res.data.accessToken,
                         refreshToken : res.data.refreshToken
                     }));

@@ -36,7 +36,7 @@ const encryptPssword = async (password, salt) => {
 const createAccessToken = (user) => {
 
     return jwt.sign({user}, process.env.ACCESS_TOKEN, {
-        expiresIn : "15M"
+        expiresIn : "3600s"
     })
 }
 
@@ -46,34 +46,54 @@ const createAccessToken = (user) => {
 const createRefreshToken = (user) => {
 
     return jwt.sign({user}, process.env.REFRESH_TOKEN, {
-        expiresIn : "10 days"
+        expiresIn : "5 days"
     })
 }
 
-const accessVerify = (token) => {
+const accessVerify = async (token) => {
 
     if(!token)
-    {
+    {        
         console.log('Token missing');
         return false;
     }
     else
     {
-        jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
+        const result = await jwt.verify(token, process.env.ACCESS_TOKEN, (err, payload) => {
             if(err)
             {
-                console.log('Token is not verify')
+                console.log('Access Token is not verify')
                 return false;
             }
                 
             else
             {
-                console.log('Token is verify');
+                console.log('Access Token is verify');
                 return true;
             }
-        })
+        });
+
+        return result;
     }
 }
+
+const checkRefresh = async (token) => {
+
+    const result = await jwt.verify(token, process.env.REFRESH_TOKEN, (err, payload) => {
+        if(err)
+        {
+            console.log('Refresh Token is not verify')
+            return false;
+        }
+        else
+        {
+            console.log('Refresh Token is verify');
+            return true;
+        }
+    });
+
+    return result;
+ }
 
 /** Mongo DB Connect */
 MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongodb.net/?retryWrites=true&w=majority', 
@@ -138,29 +158,28 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
                     res.send(false);
                 }
             }
-
-            app.get('/check', async (req, res) => {
-                const check =  await accessVerify(req.headers['jwt_access_token']);
-                console.log(check);
-                res.send(check);
-              });
-
-            app.post('/token', (req, res) => {
-                const token = req.body.token;
-
-                jwt.verify(token, process.env.REFRESH_TOKEN, async (err, payload) => {
-                    if(err)
-                        res.sendStatus(403);
-                    else{
-                        let accessToken = await createAccessToken(req.body.id);
-                        let refreshToken = await createRefreshToken(req.body.id);
-
-                        
-                    }
-
-                })
-            })
         });
     });
+
+    // Access Token Check
+    app.get('/check', async (req, res) => {
+        let check =  await accessVerify(req.headers['jwt_access_token']);
+        console.log(check);
+        await res.send(check);
+    });
+
+    app.post('/token', async (req, res) => {
+        const result = await checkRefresh(req.body.token);
+
+        if(result == true){
+            let accessToken = await createAccessToken(req.body.id);
+            let refreshToken = await createRefreshToken(req.body.id);
+            console.log('토큰 재발급');
+            res.send({access : true, accessToken, refreshToken});
+        }
+        else{
+            res.send({access : false});
+        }
+    })
 });
 
