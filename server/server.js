@@ -46,7 +46,7 @@ const createAccessToken = (user) => {
 const createRefreshToken = (user) => {
 
     return jwt.sign({user}, process.env.REFRESH_TOKEN, {
-        expiresIn : "5 days"
+        expiresIn : "10 days"
     })
 }
 
