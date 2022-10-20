@@ -2,7 +2,8 @@ import {Routes, Route, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { jwtAction } from "../util/Redux/Slice/jwtSlice";
 import { useDispatch, useSelector } from "react-redux/es/exports";
-import { useEffect } from 'react';
+import style from '../css/main.module.css';
+import { useCallback, useEffect } from 'react';
 
 const Main = () => {
 
@@ -13,52 +14,37 @@ const Main = () => {
     /**
      * 엑세스 토큰이 유효한지 체크하고 유효하지 않을경우 리프레시 토큰을 이용해 재발급 받는 함수
      */
-    const refreshRequest = () => {
-        axios.defaults.headers.common['Jwt_Access_Token'] = token.accessToken; // 헤더에 Access Token 담기
-        axios.get('http://localhost:9200/check')
-        .then(async (res) => {
-            const result = await res.data;
 
-            if(result == false){
-                const data = await axios.post('http://localhost:9200/token', {user : token.user, token : token.refreshToken})
-                .then(async (res) => {
-                    if(res.data.access == true)
-                   {
-                        console.log(res.data);
-                        axios.defaults.headers.common['Jwt_Access_Token'] = await res.data.accessToken;
-                        return await {
-                            user : token.user,
-                            accessToken : res.data.accessToken,
-                            refreshToken : res.data.refreshToken
-                        }
-                    }
-                    else
-                    {
-                        navigate('/');
-                        return await {
-                            user : null,
-                            accessToken : null,
-                            refreshToken : null                            
-                        }
-                    }
-                })
-                .catch(async (error) => {
-                    console.log(error);
-                    navigate('/');
-                    return await {
-                        user : null,
-                        accessToken : null,
-                        refreshToken : null
-                    }
-                });
+    const checkAccessToken = useCallback( async () => {
+        axios.defaults.headers.common['Jwt_Access_Token'] = token.accessToken;
+        let result:{data : boolean} = await axios.get('http://localhost:9200/check');
 
-                dispatch(jwtAction.refresh(data));
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                navigate('/');
-            });
+        console.log(result);
+
+        if(result.data == false)
+            refreshRequest();
+    }, [token]);
+
+    /**
+     * 리프레시 토큰이 유효한 토큰인지 확인하고 유효하다면 엑세스 토큰을 재발급 해주는 함수
+     */
+    const refreshRequest = async () => {
+        const res:{data : {access:Boolean, accessToken:string, refreshToken:string }} = await axios.post('http://localhost:9200/token', {user : token.user, token : token.refreshToken});
+
+        if(res?.data?.access == true)
+        {
+            axios.defaults.headers.common['Jwt_Access_Token'] = res.data.accessToken;
+            dispatch(jwtAction.refresh({
+                user : token.user,
+                accessToken : res.data.accessToken,
+                refreshToken : res.data.refreshToken
+            }));
+        }
+        else
+        {
+            dispatch(jwtAction.deleteToken());
+            navigate('/');
+        }
     }
     
     useEffect(() => {
@@ -68,13 +54,17 @@ const Main = () => {
         }
         else
         {
-            refreshRequest();
+            checkAccessToken();
         }
-    },[])
+    }, []);
 
 
     return(
         <>
+            <header className={style.header}>
+                <img src='/public/icon.png' className={style.logo}/>
+                <input type="text" placeholder='검색' />
+            </header>
             <button onClick={() => {
                 dispatch(jwtAction.deleteToken());
                 navigate('/');

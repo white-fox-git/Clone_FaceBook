@@ -17,11 +17,9 @@ const Login = () => {
     let navigate = useNavigate();
 
     /** 이메일 또는 전화번호를 입력받는 State */
-    const [id, setId] = useState<string | number | readonly string[] | undefined>('');
-
+    const [id, setId] = useState<string>('');
     /** 비밀번호를 입력받는 State 변수*/
-    const [pwd, setPwd] = useState<string | number | readonly string[] | undefined>('');
-
+    const [pwd, setPwd] = useState<string>('');
     /** Alert 창 */
     const [alert, setAlert] = useState<Boolean>(false);
 
@@ -29,6 +27,24 @@ const Login = () => {
         token.refreshToken != null ? navigate('/main') : null;
     }, []);
 
+    const loginRequest = async (data:{id:string, pwd:string}) => {
+        const result:{data : {auth : boolean, accessToken : string, refreshToken :string}} = await axios.post('http://localhost:9200/login', data);
+
+        if(result.data.auth == true)
+        {
+            dispatch(jwtAction.setToken({
+                user : id,
+                accessToken : result.data.accessToken,
+                refreshToken : result.data.refreshToken
+            }));
+            navigate('/main');
+        }
+        else
+        {
+            setAlert(true);
+            setTimeout(() => setAlert(false), 3000);
+        }
+    }
 
     /** 입력 필드 검증 및 로그인 기능 함수 */
     const login = () => {
@@ -44,35 +60,7 @@ const Login = () => {
         }
         else
         {
-
-            let data:{} = {id : id, pwd};
-
-            console.log(data);
-
-
-            // 로그인 요청
-            axios.post('http://localhost:9200/login', data)
-            .then((res) => {
-                if(res.data.auth == true)
-                {
-                    dispatch(jwtAction.setToken({
-                        user : id,
-                        accessToken : res.data.accessToken,
-                        refreshToken : res.data.refreshToken
-                    }));
-                    navigate('/main');
-                }
-                else
-                {
-                    setAlert(true);
-                    setTimeout(() => setAlert(false), 3000);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                setAlert(true);
-                setTimeout(() => setAlert(false), 3000);
-            })
+            loginRequest({id, pwd});
         }
     }
 

@@ -31,10 +31,10 @@ const CreateUser = () => {
     /** 회원가입 요청 함수 */
     const create = () => {
         let data = {
-            firstName : firstName, 
-            lastName : lastName,
-            id : id,
-            pwd : pwd
+            firstName, 
+            lastName,
+            id,
+            pwd
         }
 
         if(firstName == ''){
@@ -66,7 +66,7 @@ const CreateUser = () => {
             .catch((error) => {
                 onAlert('서버와의 연결에 실패했습니다.', 'chkPwd');
                 console.log(error);
-            });  
+            });
         }          
     }
 

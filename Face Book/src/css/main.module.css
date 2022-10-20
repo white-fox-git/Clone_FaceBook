@@ -1,0 +1,35 @@
+@import url('./default.css');
+
+.header
+{
+    padding: 10px;
+    box-shadow: 1px 1px 3px 1px #cfcfcf;
+    display: flex;
+    align-items: center;
+    font-family: var(--Noto);
+}
+
+.header img
+{
+    width: 40px;
+    cursor: pointer;
+    margin-right: 30px;
+}
+
+.header input
+{
+    padding: 8px;
+    border: 1px solid #bdbdbd;
+    border-radius: 4px 4px 4px 4px;
+    width: 40%;
+    min-width: 200px;
+    max-width: 400px;
+    font-family: var(--Noto);
+    color: var(--black-color);
+}
+
+.header input:focus
+{
+    outline: none;
+    border: 1px solid var(--main-color);
+}

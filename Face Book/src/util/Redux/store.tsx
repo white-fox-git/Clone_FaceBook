@@ -14,7 +14,7 @@ import jwtSlice from './Slice/jwtSlice';
 
 
 const persistConfig = {
-  key: 'root',
+  key: 'token',
   version: 1,
   storage,
 };

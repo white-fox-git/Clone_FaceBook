@@ -137,7 +137,7 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
                 console.log(error);
 
             if(result == null){
-                console.log('로그인 실패');
+                console.log('존재하지 않는 아이디입니다.');
                 res.send(false);
             }
             else{
@@ -154,7 +154,7 @@ MongoClient.connect('mongodb+srv://whitefox:7018blue9093@whitefox.esdrlal.mongod
                 }
                 else
                 {
-                    console.log('로그인 실패');
+                    console.log(`${req.body.id} - 로그인 실패`);
                     res.send(false);
                 }
             }
